@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Port Forward Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .container { margin-top: 40px; }
+        .card { box-shadow: 0 2px 8px #0001; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card p-4">
+        <h2 class="mb-4">Port Forward Manager</h2>
+        <form action="/add" method="POST" class="row g-3 mb-4">
+            <div class="col-md-2">
+                <input class="form-control" name="ip" placeholder="IP (e.g. 127.0.0.1)" required>
+            </div>
+            <div class="col-md-2">
+                <input class="form-control" name="port" placeholder="From Port" required>
+            </div>
+            <div class="col-md-2">
+                <input class="form-control" name="toPort" placeholder="To Port" required>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="protocol" required>
+                    <option value="tcp">TCP</option>
+                    <option value="udp">UDP</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="method" id="socat" value="socat" checked>
+                    <label class="form-check-label" for="socat">socat</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="method" id="iptables" value="iptables">
+                    <label class="form-check-label" for="iptables">iptables</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" type="submit">Add Forward</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>From Port</th>
+                    <th>Protocol</th>
+                    <th>To IP</th>
+                    <th>To Port</th>
+                    <th>Method</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% if (entries.length === 0) { %>
+                <tr><td colspan="6" class="text-center text-muted">No forwards set.</td></tr>
+            <% } %>
+            <% entries.forEach(e => { %>
+                <tr>
+                    <td><%= e.port %></td>
+                    <td><%= e.protocol.toUpperCase() %></td>
+                    <td><%= e.ip %></td>
+                    <td><%= e.toPort %></td>
+                    <td><%= e.method %></td>
+                    <td>
+                        <form action="/remove" method="POST" style="display:inline">
+                            <input type="hidden" name="port" value="<%= e.port %>">
+                            <input type="hidden" name="protocol" value="<%= e.protocol %>">
+                            <input type="hidden" name="method" value="<%= e.method %>">
+                            <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Remove forward?')">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

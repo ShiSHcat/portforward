@@ -1,0 +1,16 @@
+{
+  "name": "portbot",
+  "version": "1.0.0",
+  "description": "Simple web-based port forward manager with socat and iptables support.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-basic-auth": "^1.2.1",
+    "dotenv": "^16.4.5"
+  }
+}
